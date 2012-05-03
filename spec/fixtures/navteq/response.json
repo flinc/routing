@@ -1,0 +1,357 @@
+{
+    "Response": {
+        "MetaInfo": {
+            "Timestamp": "2012-05-03T17:21:15.962+02:00",
+            "AdditionalData": [
+                {
+                    "value": "2011Q1_DICI",
+                    "key": "Map0"
+                },
+                {
+                    "value": "routeserver,9.1-2011.07.06",
+                    "key": "Module0"
+                },
+                {
+                    "value": "66",
+                    "key": "Module0ExecTime"
+                },
+                {
+                    "value": "routing-route-service,6.2.6.0",
+                    "key": "Service"
+                }
+            ]
+        },
+        "Route": [
+            {
+                "RouteId": "REMtZ3UAAAH-1EdCQmAPQZrUR0I5Yg9B8pzd_H3QHQmxJTAEUdEdCcEhMASR1D_xgwbwSCjZTiEI8O9IaOVOIejx_Zu_0QBdAyEDH3chSUB6fQwAew",
+                "Waypoint": [
+                    {
+                        "LinkId": "-52585230",
+                        "MappedPosition": {
+                            "Latitude": 49.9576187,
+                            "Longitude": 8.9614801
+                        },
+                        "OriginalPosition": {
+                            "Latitude": 49.958,
+                            "Longitude": 8.961
+                        },
+                        "Type": "stopOver"
+                    },
+                    {
+                        "LinkId": "-61868764",
+                        "MappedPosition": {
+                            "Latitude": 49.8636017,
+                            "Longitude": 8.7520599
+                        },
+                        "OriginalPosition": {
+                            "Latitude": 49.8634,
+                            "Longitude": 8.7523
+                        },
+                        "Type": "stopOver"
+                    },
+                    {
+                        "LinkId": "-52433009",
+                        "MappedPosition": {
+                            "Latitude": 49.8745117,
+                            "Longitude": 8.6540937
+                        },
+                        "OriginalPosition": {
+                            "Latitude": 49.8752,
+                            "Longitude": 8.654
+                        },
+                        "Type": "stopOver"
+                    }
+                ],
+                "Mode": {
+                    "Type": "fastest",
+                    "TransportModes": [
+                        "car"
+                    ]
+                },
+                "Leg": [
+                    {
+                        "Start": {
+                            "LinkId": "-52585230",
+                            "MappedPosition": {
+                                "Latitude": 49.9576187,
+                                "Longitude": 8.9614801
+                            },
+                            "OriginalPosition": {
+                                "Latitude": 49.958,
+                                "Longitude": 8.961
+                            },
+                            "Type": "stopOver"
+                        },
+                        "End": {
+                            "LinkId": "-61868764",
+                            "MappedPosition": {
+                                "Latitude": 49.8636017,
+                                "Longitude": 8.7520599
+                            },
+                            "OriginalPosition": {
+                                "Latitude": 49.8634,
+                                "Longitude": 8.7523
+                            },
+                            "Type": "stopOver"
+                        },
+                        "Length": 21813,
+                        "TravelTime": 1312.7,
+                        "Maneuver": [
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.9576187,
+                                    "Longitude": 8.9614801
+                                },
+                                "Instruction": "In Richtung Rhönstraße fahren in der Friedrich-Ebert-Straße. 250 m der Straße folgen.",
+                                "TravelTime": 48.1,
+                                "Length": 268,
+                                "Time": "2012-05-03T17:21:15.890+02:00",
+                                "id": "M1"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.9569397,
+                                    "Longitude": 8.95786
+                                },
+                                "Instruction": "Rechts halten auf die Hindenburgstraße. 40 m der Straße folgen.",
+                                "TravelTime": 9.5,
+                                "Length": 40,
+                                "Time": "2012-05-03T17:22:03.990+02:00",
+                                "id": "M2"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.95718,
+                                    "Longitude": 8.9574299
+                                },
+                                "Instruction": "Links abbiegen auf die Darmstädter Straße (B26). 18 km der Straße folgen.",
+                                "TravelTime": 849.2,
+                                "Length": 17512,
+                                "Time": "2012-05-03T17:22:13.450+02:00",
+                                "id": "M3"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8759689,
+                                    "Longitude": 8.7687302
+                                },
+                                "Instruction": "Auffahren auf die B38. 1.9 km der Straße folgen.",
+                                "TravelTime": 93.2,
+                                "Length": 1934,
+                                "Time": "2012-05-03T17:36:22.640+02:00",
+                                "id": "M4"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8628807,
+                                    "Longitude": 8.7691898
+                                },
+                                "Instruction": "Rechts abbiegen auf die Dieburger Straße (L3115). 1.1 km der Straße folgen.",
+                                "TravelTime": 138.1,
+                                "Length": 1109,
+                                "Time": "2012-05-03T17:37:55.880+02:00",
+                                "id": "M5"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8574791,
+                                    "Longitude": 8.7565403
+                                },
+                                "Instruction": "Rechts halten auf die Darmstädter Straße (L3104). 500 m der Straße folgen.",
+                                "TravelTime": 75.3,
+                                "Length": 524,
+                                "Time": "2012-05-03T17:40:13.930+02:00",
+                                "id": "M6"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8612404,
+                                    "Longitude": 8.7521095
+                                },
+                                "Instruction": "Rechts abbiegen auf den Messeler Weg. 350 m der Straße folgen.",
+                                "TravelTime": 70.1,
+                                "Length": 340,
+                                "Time": "2012-05-03T17:41:29.220+02:00",
+                                "id": "M7"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8639412,
+                                    "Longitude": 8.75313
+                                },
+                                "Instruction": "Links abbiegen auf die Straße Am Rödersberg. 100 m der Straße folgen.",
+                                "TravelTime": 29.3,
+                                "Length": 86,
+                                "Time": "2012-05-03T17:42:39.310+02:00",
+                                "id": "M8"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8636017,
+                                    "Longitude": 8.7520599
+                                },
+                                "Instruction": "Ihr Ziel in der Straße Am Rödersberg ist links. Ihre Fahrt ist 22 km lang und dauert etwa 22 min.",
+                                "TravelTime": 0,
+                                "Length": 0,
+                                "Time": "2012-05-03T17:43:08.560+02:00",
+                                "id": "M9"
+                            }
+                        ]
+                    },
+                    {
+                        "Start": {
+                            "LinkId": "+61868764",
+                            "MappedPosition": {
+                                "Latitude": 49.8636017,
+                                "Longitude": 8.7520599
+                            },
+                            "OriginalPosition": {
+                                "Latitude": 49.8634,
+                                "Longitude": 8.7523
+                            },
+                            "Type": "stopOver"
+                        },
+                        "End": {
+                            "LinkId": "-52433009",
+                            "MappedPosition": {
+                                "Latitude": 49.8745117,
+                                "Longitude": 8.6540937
+                            },
+                            "OriginalPosition": {
+                                "Latitude": 49.8752,
+                                "Longitude": 8.654
+                            },
+                            "Type": "stopOver"
+                        },
+                        "Length": 8200,
+                        "TravelTime": 693.3,
+                        "Maneuver": [
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8636017,
+                                    "Longitude": 8.7520599
+                                },
+                                "Instruction": "In Richtung Messeler Weg fahren in der Straße Am Rödersberg. 100 m der Straße folgen.",
+                                "TravelTime": 12.2,
+                                "Length": 85,
+                                "Time": "2012-05-03T17:43:08.590+02:00",
+                                "id": "M10"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8639412,
+                                    "Longitude": 8.75313
+                                },
+                                "Instruction": "Rechts abbiegen auf den Messeler Weg. 100 m der Straße folgen.",
+                                "TravelTime": 20.9,
+                                "Length": 90,
+                                "Time": "2012-05-03T17:43:20.830+02:00",
+                                "id": "M11"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8632507,
+                                    "Longitude": 8.7537298
+                                },
+                                "Instruction": "Rechts halten und auf dem Messeler Weg bleiben. 250 m der Straße folgen.",
+                                "TravelTime": 46.2,
+                                "Length": 250,
+                                "Time": "2012-05-03T17:43:41.730+02:00",
+                                "id": "M12"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8612404,
+                                    "Longitude": 8.7521095
+                                },
+                                "Instruction": "Rechts abbiegen auf die Darmstädter Straße (L3104). 1.7 km der Straße folgen.",
+                                "TravelTime": 142.1,
+                                "Length": 1670,
+                                "Time": "2012-05-03T17:44:27.900+02:00",
+                                "id": "M13"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8641891,
+                                    "Longitude": 8.7293701
+                                },
+                                "Instruction": "Weiter auf die Aschaffenburger Straße fahren. 400 m der Straße folgen.",
+                                "TravelTime": 33.5,
+                                "Length": 418,
+                                "Time": "2012-05-03T17:46:50.050+02:00",
+                                "id": "M14"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8653107,
+                                    "Longitude": 8.7237902
+                                },
+                                "Instruction": "Auffahren auf die B26 in Richtung Darmstadt. 5.5 km der Straße folgen.",
+                                "TravelTime": 384.6,
+                                "Length": 5356,
+                                "Time": "2012-05-03T17:47:23.590+02:00",
+                                "id": "M15"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8731689,
+                                    "Longitude": 8.65728
+                                },
+                                "Instruction": "Rechts abbiegen auf die Straße Schlossgraben (B26). 150 m der Straße folgen.",
+                                "TravelTime": 25,
+                                "Length": 153,
+                                "Time": "2012-05-03T17:53:48.230+02:00",
+                                "id": "M16"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8741608,
+                                    "Longitude": 8.6561899
+                                },
+                                "Instruction": "Links abbiegen auf die Straße Karolinenplatz (B26). 200 m der Straße folgen.",
+                                "TravelTime": 28.6,
+                                "Length": 178,
+                                "Time": "2012-05-03T17:54:13.200+02:00",
+                                "id": "M17"
+                            },
+                            {
+                                "_type": "PrivateTransportManeuverType",
+                                "Position": {
+                                    "Latitude": 49.8745117,
+                                    "Longitude": 8.6540937
+                                },
+                                "Instruction": "Ihr Ziel in der Friedensplatz, Zeughausstraße (B26) ist rechts. Ihre Fahrt ist 30 km lang und dauert etwa 33 min.",
+                                "TravelTime": 0,
+                                "Length": 0,
+                                "Time": "2012-05-03T17:54:41.840+02:00",
+                                "id": "M18"
+                            }
+                        ]
+                    }
+                ],
+                "Summary": {
+                    "Distance": 30013,
+                    "TrafficTime": 2005,
+                    "BaseTime": 2005
+                }
+            }
+        ]
+    }
+}
