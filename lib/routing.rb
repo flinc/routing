@@ -35,7 +35,7 @@ class Routing
   # @return [Array<GeoPoint>]
   #   An array of geo points that represent the calculated route.
   def calculate(*geo_points)
-    _calculate(geo_points, middlewares + [adapter])
+    _calculate(geo_points.flatten, middlewares + [adapter])
   end
 
   # @return [Array] The list of used middlewares.
