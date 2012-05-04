@@ -17,6 +17,8 @@ class Routing
     @middlewares = []
 
     yield(self) if block_given?
+    
+    self
   end
 
   # The adapter for the routing service that should be used.
