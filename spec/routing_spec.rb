@@ -28,8 +28,32 @@ describe Routing do
 
   end
 
-  context 'calculating a route through the middleware stack' do
-    pending
+  describe '#calculate' do
+    let(:geo_points){ [Struct.new(:lat, :lng).new(1, 2), Struct.new(:lat, :lng).new(3, 4), Struct.new(:lat, :lng).new(5, 6)] }
+    let(:adapter) { mock(:calculate => geo_points) }
+
+    before do
+      subject.stub(:adapter).and_return(adapter)
+    end
+
+    it 'should call the adapter' do
+      adapter.should_receive(:calculate).with(geo_points)
+      subject.calculate(geo_points)
+    end
+
+    it 'should call each middleware in the given order' do
+      first_middleware = double(Routing::Middleware)
+      first_middleware.should_receive(:calculate).
+        with(geo_points).and_yield(geo_points)
+
+      second_middleware = double(Routing::Middleware)
+      second_middleware.should_receive(:calculate).
+        with(geo_points)
+
+      subject.stub(:middlewares).and_return([first_middleware, second_middleware])
+
+      subject.calculate(geo_points)
+    end
   end
 
   context 'using the middleware' do
