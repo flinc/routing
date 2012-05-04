@@ -14,7 +14,12 @@ class Routing
 
       def get(geo_points)
         params = default_params.merge geo_points_to_params(geo_points)
-        response = connection.get service_path, params
+
+        response = connection.get do |request|
+          request.url(service_path)
+          request.params = params
+        end
+
         response.body
       end
 
@@ -38,7 +43,7 @@ class Routing
 
       protected
 
-      # The path on the server to the routing service.      
+      # The path on the server to the routing service.
       # This is determined by the server and should not be changed.
       #
       # @returns [String]
