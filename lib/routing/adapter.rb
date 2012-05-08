@@ -16,6 +16,7 @@ class Routing
   module Adapter
 
     autoload :Navteq, "routing/adapter/navteq"
+    autoload :Test, "routing/adapter/test"
 
   end
 end
