@@ -22,7 +22,7 @@ class Routing
     #   Automatically sets values for the attributes that match the keys of the hash.
     def initialize(attributes = {})
       attributes.each do |attribute, value|
-        send("#{attribute}=", value) if respond_to? attribute
+        send("#{attribute}=", value) if respond_to? "#{attribute}="
       end
     end
 
