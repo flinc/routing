@@ -8,6 +8,14 @@ class Routing
     # Array of {GeoPoint}s, representing the calculated route.
     class Navteq
 
+      ATTR_ACCESSIBLE = [ :host, :default_params ]
+
+      def initialize(options = {})
+        options.each do |attribute, value|
+          send("#{attribute}=", value) if ATTR_ACCESSIBLE.include?(attribute)
+        end
+      end
+
       def calculate(geo_points)
         parse get(geo_points)
       end
@@ -23,16 +31,20 @@ class Routing
         response.body
       end
 
+      attr_writer :host
+
       def host
-        "http://example.org"
+        @host || "http://example.org"
       end
 
       def parse(response)
         ::Routing::Parser::NavteqSimple.new(response).to_geo_points
       end
 
+      attr_writer :default_params
+
       def default_params
-        {
+        @default_params || {
           departure:          Time.now.utc.iso8601,
           mode0:              "fastest;car",
           language:           "de_DE",

@@ -8,6 +8,19 @@ describe Routing::Adapter::Navteq do
       expect { Routing::Adapter::Navteq.new }.to_not raise_error
     end
 
+    it 'sets the host in its options' do
+      described_class.new(:host => "new_host").host.should == "new_host"
+    end
+
+    it 'sets the default params in its options' do
+      params = { :hello => "world" }
+      described_class.new(:default_params => params).default_params == params
+    end
+
+    it 'ignores unknown options' do
+      expect { described_class.new(:hello => "world") }.to_not raise_error
+    end
+
   end
 
   its(:host){ should be_a String }
