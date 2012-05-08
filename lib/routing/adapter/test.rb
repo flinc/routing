@@ -1,12 +1,22 @@
 class Routing
   module Adapter
 
-    # Simple test adapter, that just returns a copy of the {GeoPoint}s array
-    # that it recieved (just copies the lat, lng values).
+    # Simple test adapter, that returns an array of {GeoPoint}s
+    # with values which are based on the ones it recieved.
     class Test
 
       def calculate(geo_points)
-        geo_points.collect{|point| GeoPoint.new(:lat => point.lat, :lng => point.lng) }
+        geo_points.collect do |point|
+          GeoPoint.new(
+            :lat => point.lat,
+            :lng => point.lng,
+            :original_lat => point.lat,
+            :original_lng => point.lng,
+            :relative_time => 100,
+            :distance => 100,
+            :waypoint => true
+          )
+        end
       end
     end
 
