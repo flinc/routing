@@ -17,6 +17,10 @@ describe Routing::Parser::NavteqSimple do
     File.open("./spec/fixtures/navteq/response.json").read
   end
 
+  let(:error_response) do
+    File.open("./spec/fixtures/navteq/error_response.json").read
+  end
+
   subject{ described_class.new(response) }
 
   let(:parsed_leg) { subject.parse_leg(subject.route["Leg"].first) }
@@ -30,6 +34,15 @@ describe Routing::Parser::NavteqSimple do
 
     it "should save the response" do
       subject.response.should == JSON.parse(response)
+    end
+
+  end
+
+  context 'parsing an error from the server' do
+
+
+    it 'should throw an RoutingFailed error' do
+      lambda{ described_class.new(error_response) }.should raise_error(Routing::Parser::RoutingFailed)
     end
 
   end

@@ -12,6 +12,8 @@ class Routing
       def initialize(response)
         @response = JSON.parse(response)
 
+        check_for_error!
+
         # only take the first route
         @route = self.response["Response"]["Route"].first
         @overall_covered_distance  = 0
@@ -136,6 +138,14 @@ class Routing
         geo_point.original_lng = matching_waypoint["OriginalPosition"]["Longitude"]
 
         geo_point
+      end
+
+      private
+
+      def check_for_error!
+        if @response['Error']
+          raise Routing::Parser::RoutingFailed.new "#{@response['Error']['type']}(#{@response['Error']['subtype']}) - #{@response['Error']['Details']}"
+        end
       end
 
     end
