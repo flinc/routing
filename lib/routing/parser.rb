@@ -19,5 +19,8 @@ class Routing
     class NoMatchingMappedPositionFound < StandardError
     end
 
+    class RoutingFailed < StandardError
+    end
+
   end
 end
