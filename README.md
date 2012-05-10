@@ -6,41 +6,29 @@ It aims to make parsing and use-case specific data handling easy trough an exten
 
 ## Usage
 
-TODO: Write better usage instructions here
-
 ```ruby
-
 start = Routing::GeoPoint.new(:lat => 49, :lng => 9)
-
 destination = Routing::GeoPoint.new(:lat => 48, :lng => 8.9)
 
-route = Routing.new.calculate start, destination
-
+route = Routing.new.calculate(start, destination)
 ```
 
 ### Middleware
 
 ```ruby
-
-routing = Routing.new do |routing|
-
-  routing.use MyMiddleware.new
-  routing.use MyRoutingCache.new
-
+routing = Routing.new do |r|
+  r.use MyMiddleware.new
+  r.use MyRoutingCache.new
 end
 
-route = Routing.new.calculate start, destination
-
+route = routing.calculate(start, destination)
 ```
 
 ### Custom Adapters
 
 ```ruby
-
 routing = Routing.new(MyAdapter.new)
-
-route = Routing.new.calculate start, destination
-
+route = routing.calculate(start, destination)
 ```
 
 ## Installation
