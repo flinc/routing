@@ -35,7 +35,7 @@ class Routing
       attr_writer :host
 
       def host
-        @host || "http://example.org"
+        @host
       end
 
       def parse(response)
@@ -66,7 +66,7 @@ class Routing
       end
 
       def geo_points_to_params(geo_points)
-        Hash[geo_points.each_with_index.map{|point, i| [ "waypoint#{i}", "geo!#{point.lat},#{point.lng}" ] }]
+        Hash[geo_points.each_with_index.map { |point, i| [ "waypoint#{i}", "geo!#{point.lat},#{point.lng}" ] }]
       end
 
       def connection

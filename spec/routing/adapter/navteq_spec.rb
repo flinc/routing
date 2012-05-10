@@ -23,8 +23,6 @@ describe Routing::Adapter::Navteq do
 
   end
 
-  its(:host){ should be_a String }
-
   its(:service_path){ should be_a String }
 
   its(:default_params){ should be_a Hash }
