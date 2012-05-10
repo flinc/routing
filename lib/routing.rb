@@ -47,7 +47,7 @@ class Routing
   #
   # @return [Array<Routing::Middleware>] The list of used middlewares.
   def middlewares=(middlewares)
-    middlewares.each { |middleware| @middlewares << middleware }
+    @middlewares = middlewares
   end
 
   # Adds an object to the middleware stack.

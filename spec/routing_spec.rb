@@ -66,6 +66,7 @@ describe Routing do
 
     describe '#middlewares' do
       it 'replaces all middlewares' do
+        subject.use(:original)
         subject.middlewares = :first, :second
         subject.middlewares.should == [:first, :second]
       end
