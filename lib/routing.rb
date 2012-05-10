@@ -11,14 +11,11 @@ class Routing
   # Creates a new instance of the routing class
   #
   # @param [Object] adapter Adapter for the routing service that should be used, defaults to {Routing::Adapter::Navteq}.
-  #
   def initialize(adapter = self.class.default_adapter)
     @adapter = adapter
     @middlewares = []
 
     yield(self) if block_given?
-    
-    self
   end
 
   # The adapter for the routing service that should be used.
@@ -35,7 +32,7 @@ class Routing
   # @return [Array<GeoPoint>]
   #   An array of geo points that represent the calculated route.
   def calculate(*geo_points)
-    _calculate(geo_points.flatten, middlewares + [adapter])
+    calculate_with_stack(geo_points.flatten, middlewares + [adapter])
   end
 
   # @return [Array] The list of used middlewares.
@@ -63,8 +60,7 @@ class Routing
 
     # Sets the default adapter/routing service.
     #
-    # @return [Object]
-    #   Default adapter.
+    # @return [Object] Default adapter.
     attr_writer :default_adapter
 
     # The default adapter/routing service that is used, if no one is specified.
@@ -79,8 +75,6 @@ class Routing
 
   private
 
-  # @private
-  #
   # Helper method that will iterate through the middleware stack.
   #
   # @param [Array<GeoPoint>] geo_points
@@ -88,9 +82,9 @@ class Routing
   #
   # @param [Routing::Middleware] stack
   #   The remaining stack of middlewares to iterate through.
-  def _calculate(geo_points, stack)
+  def calculate_with_stack(geo_points, stack)
     stack.shift.calculate(geo_points) do |gp|
-      _calculate(gp, stack)
+      calculate_with_stack(gp, stack)
     end
   end
 
