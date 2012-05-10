@@ -18,10 +18,6 @@ class Routing
     yield(self) if block_given?
   end
 
-  # The adapter for the routing service that should be used.
-  # @return [Object] The currently used adapter.
-  attr_accessor :adapter
-
   # Calculates a route for the passed {GeoPoint}s.
   # These will be passed through the middleware stack and will
   # finally be given to the configured adapter which calculates a route out of it.
@@ -32,7 +28,7 @@ class Routing
   # @return [Array<GeoPoint>]
   #   An array of geo points that represent the calculated route.
   def calculate(*geo_points)
-    calculate_with_stack(geo_points.flatten, middlewares + [adapter])
+    calculate_with_stack(geo_points.flatten, middlewares + [@adapter])
   end
 
   # @return [Array] The list of used middlewares.

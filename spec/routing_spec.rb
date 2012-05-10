@@ -4,21 +4,28 @@ describe Routing do
 
   context 'creating a new instance' do
 
+    let(:adapter) { mock }
+
     it 'can be called without arguments' do
       expect { Routing.new }.to_not raise_error
     end
 
     it 'uses the default adapter, if no adapter is passed' do
-      subject.adapter.should == described_class.default_adapter
+      described_class.default_adapter.should_receive(:calculate)
+      subject.calculate(stub, stub)
     end
 
     it 'takes the passed adapter, if given' do
-      Routing.new(:my_adapter).adapter.should == :my_adapter
+      adapter.should_receive(:calculate)
+      described_class.new(adapter).calculate(stub, stub)
     end
 
     it 'takes a configuration block' do
-      configured_routing = Routing.new { |routing| routing.adapter = "OVERWRITE_ADAPTER" }
-      configured_routing.adapter.should == "OVERWRITE_ADAPTER"
+      expect { described_class.new { throw :called } }.to throw_symbol(:called)
+    end
+
+    it 'passes itself to the configuration block' do
+      described_class.new { |r| r.should be_instance_of(described_class) }
     end
 
   end
