@@ -14,7 +14,7 @@ class Routing
   # In fact, this is just a container class which is no hard requirement in general.
   # If you decide to roll your own {Adapter}, {Parser} and maybe {Middleware},
   # you could replace the class completely
-  class GeoPoint
+  class GeoPoint < Struct.new(:lat, :lng, :original_lat, :original_lng, :relative_time, :distance, :waypoint, :type)
 
     # Creates a new GeoPoint instance.
     #
@@ -22,25 +22,9 @@ class Routing
     #   Automatically sets values for the attributes that match the keys of the hash.
     def initialize(attributes = {})
       attributes.each do |attribute, value|
-        send("#{attribute}=", value) if respond_to? "#{attribute}="
+        self[attribute] = value if members.include?(attribute)
       end
     end
-
-    attr_accessor :lat
-
-    attr_accessor :lng
-
-    attr_accessor :original_lat
-
-    attr_accessor :original_lng
-
-    attr_accessor :relative_time
-
-    attr_accessor :distance
-
-    attr_accessor :waypoint
-
-    attr_accessor :type
 
     def waypoint?
       waypoint && !waypoint.nil?
