@@ -1,4 +1,5 @@
 require 'time'
+require 'faraday'
 
 class Routing
   module Adapter

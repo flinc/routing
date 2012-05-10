@@ -1,12 +1,7 @@
-source 'https://rubygems.org'
+source :rubygems
 
-# Specify your gem's dependencies in routing.gemspec
 gemspec
 
-group :development, :test do
-  gem "faraday", ">= 0.7.0"
-  gem "awesome_print"
-  gem "json"
-  gem "yard"
-  gem "redcarpet"
-end
+gem "awesome_print"
+gem "yard"
+gem "redcarpet"
