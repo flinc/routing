@@ -12,7 +12,7 @@ describe Routing::Adapter::Test do
 
   describe '#calculate' do
 
-    let(:geo_points){ [Struct.new(:lat, :lng).new(1, 2), Struct.new(:lat, :lng).new(3, 4), Struct.new(:lat, :lng).new(5, 6)] }
+    let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
 
     it 'returns an array of geopoints with values that are passed to the method' do
       subject.calculate(geo_points).each_with_index do |new_geo_point, index|

@@ -45,7 +45,7 @@ describe Routing::Adapter::Navteq do
 
   describe '#geo_points_to_params' do
 
-    let(:geo_points){ [Struct.new(:lat, :lng).new(1, 2), Struct.new(:lat, :lng).new(3, 4), Struct.new(:lat, :lng).new(5, 6)] }
+    let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
     let(:params){ subject.send(:geo_points_to_params, geo_points) }
 
     it 'creates a hash with enumerated waypoint keys and the navteq special geo! syntax as values' do
