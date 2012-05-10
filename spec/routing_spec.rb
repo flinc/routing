@@ -4,12 +4,6 @@ describe Routing do
 
   context 'creating a new instance' do
 
-    let(:configured_routing) do
-      Routing.new do |routing|
-        routing.adapter = "OVERWRITE_ADAPTER"
-      end
-    end
-
     it 'can be called without arguments' do
       expect { Routing.new }.to_not raise_error
     end
@@ -23,18 +17,17 @@ describe Routing do
     end
 
     it 'takes a configuration block' do
+      configured_routing = Routing.new { |routing| routing.adapter = "OVERWRITE_ADAPTER" }
       configured_routing.adapter.should == "OVERWRITE_ADAPTER"
     end
 
   end
 
   describe '#calculate' do
-    let(:geo_points){ [Struct.new(:lat, :lng).new(1, 2), Struct.new(:lat, :lng).new(3, 4), Struct.new(:lat, :lng).new(5, 6)] }
+    let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
     let(:adapter) { mock(:calculate => geo_points) }
 
-    before do
-      subject.stub(:adapter).and_return(adapter)
-    end
+    subject { described_class.new(adapter) }
 
     it 'should call the adapter' do
       adapter.should_receive(:calculate).with(geo_points)
@@ -63,28 +56,19 @@ describe Routing do
        subject.should have(0).middlewares
     end
 
-    describe '#use an additional middleware' do
-
-      before(:each) do
+    describe '#use' do
+      it 'appends the new middleware to the stack' do
         subject.use(:hello)
         subject.use(:world)
-      end
-
-      it 'appends the new middleware to the stack' do
         subject.middlewares.should == [:hello, :world]
       end
     end
 
     describe '#middlewares' do
-      before(:each) do
-        subject.middlewares = :first, :second
-      end
-
       it 'replaces all middlewares' do
+        subject.middlewares = :first, :second
         subject.middlewares.should == [:first, :second]
       end
     end
-
   end
-
 end
