@@ -8,6 +8,25 @@ class Routing
   autoload :Middleware, "routing/middleware"
   autoload :Parser,     "routing/parser"
 
+  class << self
+
+    # Sets the default adapter/routing service.
+    #
+    # @return [Object] Default adapter.
+    attr_writer :default_adapter
+
+    # The default adapter/routing service that is used, if no one is specified.
+    # Currently this is {Routing::Adapter::Navteq}.
+    #
+    # @return [Object] Current default adapter.
+    def default_adapter
+      @default_adapter ||= Routing::Adapter::Navteq.new
+    end
+
+  end
+
+  attr_accessor :middlewares
+
   # Creates a new instance of the routing class
   #
   # @param [Object] adapter Adapter for the routing service that should be used, defaults to {Routing::Adapter::Navteq}.
@@ -31,18 +50,6 @@ class Routing
     calculate_with_stack(geo_points.flatten, middlewares + [@adapter])
   end
 
-  # @return [Array] The list of used middlewares.
-  attr_reader :middlewares
-
-  # Sets/replaces the used middleware stack.
-  #
-  # @param [Array] middlewares An array of middlewares to use
-  #
-  # @return [Array<Routing::Middleware>] The list of used middlewares.
-  def middlewares=(middlewares)
-    @middlewares = middlewares
-  end
-
   # Adds an object to the middleware stack.
   #
   # @param [Routing::Middleware] middleware The middleware to append to the stack.
@@ -50,23 +57,6 @@ class Routing
   # @return [Array<Routing::Middleware>] Updated list of used middlewares.
   def use(middleware)
     @middlewares << middleware
-  end
-
-  class << self
-
-    # Sets the default adapter/routing service.
-    #
-    # @return [Object] Default adapter.
-    attr_writer :default_adapter
-
-    # The default adapter/routing service that is used, if no one is specified.
-    # Currently this is {Routing::Adapter::Navteq}.
-    #
-    # @return [Object] Current default adapter.
-    def default_adapter
-      @default_adapter ||= Routing::Adapter::Navteq.new
-    end
-
   end
 
   private
