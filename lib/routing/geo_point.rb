@@ -27,7 +27,7 @@ class Routing
     end
 
     def waypoint?
-      waypoint && !waypoint.nil?
+      !!waypoint
     end
 
   end
