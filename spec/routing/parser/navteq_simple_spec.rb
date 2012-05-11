@@ -13,7 +13,7 @@ describe Routing::Parser::NavteqSimple do
 
   let(:response) { fixture('navteq/response.json') }
   let(:json_response) { JSON.parse(response) }
-  subject{ described_class.new(response) }
+  subject { described_class.new(response) }
 
   let(:maneuver_item) { json_response["Response"]["Route"].first["Leg"].first["Maneuver"].first }
   let(:parsed_maneuver_item) { subject.parse_maneuver(maneuver_item) }
@@ -29,35 +29,30 @@ describe Routing::Parser::NavteqSimple do
 
   describe '#to_geo_points' do
 
-    it 'returns an array of geopoints' do
-      subject.to_geo_points.should be_an(Array)
-      subject.to_geo_points.first.should be_a(::Routing::GeoPoint)
+    it 'returns geopoints' do
+      subject.to_geo_points.each { |point| point.should be_a(::Routing::GeoPoint) }
     end
 
-    describe 'length of the geopoint array' do
-
+    describe 'number of geo points' do
       let(:leg_size) { json_response["Response"]["Route"].first["Leg"].size }
       let(:leg_touching_point_size) { leg_size - 1 }
       let(:maneuver_size) { json_response["Response"]["Route"].first["Leg"].inject(0) { |sum, leg| sum + leg["Maneuver"].size } }
 
       it 'has the length of all maneuvers minus the duplicate ones at the touching points' do
-        subject.to_geo_points.size.should == maneuver_size - leg_touching_point_size
+        subject.to_geo_points.should have(maneuver_size - leg_touching_point_size).geo_points
       end
 
       it 'includes the same number of waypoints as passed in' do
-        subject.to_geo_points.select(&:waypoint?).size == geo_point_array.size
+        subject.to_geo_points.select(&:waypoint?).should have(geo_point_array.size).geo_points
       end
-
     end
-
   end
 
   describe '#parse_leg' do
     let(:parsed_leg) { subject.parse_leg(json_response["Response"]["Route"].first["Leg"].first) }
 
     it 'collects all maneuvers as geo points' do
-       parsed_leg.should be_an(Array)
-       parsed_leg.first.should be_a(::Routing::GeoPoint)
+       parsed_leg.each { |point| point.should be_a(::Routing::GeoPoint) }
     end
 
     it 'leaves out the first maneuver' do
