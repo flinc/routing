@@ -2,8 +2,8 @@
 require File.expand_path('../lib/routing/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Christian Bäuerlein"]
-  gem.email         = ["christian@ffwdme.com"]
+  gem.authors       = ["Christian Bäuerlein", "Benedikt Deicke"]
+  gem.email         = ["christian@ffwdme.com", "benedikt@synatic.net"]
   gem.summary       = %q{A ruby interface for route calculation services}
   gem.description   = %q{
     Provides a generic interface for routing services that can by used to calculate directions between geolocations.
