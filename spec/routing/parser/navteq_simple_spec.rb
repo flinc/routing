@@ -5,29 +5,18 @@ describe Routing::Parser::NavteqSimple do
 
   let(:geo_point_array) do
     [
-      Routing::GeoPoint.new(lat: 49.958, lng: 8.961),
-      Routing::GeoPoint.new(lat: 49.8634, lng: 8.7523),
-      Routing::GeoPoint.new(lat: 49.8752,  lng: 8.654)
+      mock(lat: 49.9580, lng: 8.9610),
+      mock(lat: 49.8634, lng: 8.7523),
+      mock(lat: 49.8752, lng: 8.6540)
     ]
   end
 
   let(:response) { fixture('navteq/response.json') }
+  let(:json_response) { JSON.parse(response) }
   subject{ described_class.new(response) }
 
-  let(:parsed_leg) { subject.parse_leg(subject.route["Leg"].first) }
-
-  let(:maneuver_item) { subject.route["Leg"].first["Maneuver"].first }
+  let(:maneuver_item) { json_response["Response"]["Route"].first["Leg"].first["Maneuver"].first }
   let(:parsed_maneuver_item) { subject.parse_maneuver(maneuver_item) }
-
-  context 'creating a new instance' do
-
-    its(:route) { should be_a(Hash) }
-
-    it "should save the response" do
-      subject.response.should == JSON.parse(response)
-    end
-
-  end
 
   context 'parsing an error from the server' do
 
@@ -36,7 +25,6 @@ describe Routing::Parser::NavteqSimple do
     it 'should throw an RoutingFailed error' do
       lambda{ described_class.new(error_response) }.should raise_error(Routing::Parser::RoutingFailed)
     end
-
   end
 
   describe '#to_geo_points' do
@@ -48,9 +36,9 @@ describe Routing::Parser::NavteqSimple do
 
     describe 'length of the geopoint array' do
 
-      let(:leg_size) { subject.route["Leg"].size }
+      let(:leg_size) { json_response["Response"]["Route"].first["Leg"].size }
       let(:leg_touching_point_size) { leg_size - 1 }
-      let(:maneuver_size) { subject.route["Leg"].inject(0) {|sum, leg| sum + leg["Maneuver"].size } }
+      let(:maneuver_size) { json_response["Response"]["Route"].first["Leg"].inject(0) { |sum, leg| sum + leg["Maneuver"].size } }
 
       it 'has the length of all maneuvers minus the duplicate ones at the touching points' do
         subject.to_geo_points.size.should == maneuver_size - leg_touching_point_size
@@ -65,6 +53,7 @@ describe Routing::Parser::NavteqSimple do
   end
 
   describe '#parse_leg' do
+    let(:parsed_leg) { subject.parse_leg(json_response["Response"]["Route"].first["Leg"].first) }
 
     it 'collects all maneuvers as geo points' do
        parsed_leg.should be_an(Array)
@@ -72,7 +61,7 @@ describe Routing::Parser::NavteqSimple do
     end
 
     it 'leaves out the first maneuver' do
-      parsed_leg.size.should == subject.route["Leg"].first["Maneuver"].size - 1
+      parsed_leg.size.should == json_response["Response"]["Route"].first["Leg"].first["Maneuver"].size - 1
     end
 
     it 'marks only the first maneuver as waypoint' do
@@ -98,18 +87,6 @@ describe Routing::Parser::NavteqSimple do
 
     it 'merges additionally passed attributes' do
       subject.parse_maneuver(maneuver_item, waypoint: true).waypoint.should be
-    end
-
-    it 'sets distance and increases the overall distance' do
-      old_distance = subject.overall_covered_distance
-      subject.parse_maneuver(maneuver_item)
-      subject.overall_covered_distance.should eql(old_distance + maneuver_item["Length"])
-    end
-
-    it 'sets time and increases the overall time' do
-      old_time = subject.overall_relative_time
-      subject.parse_maneuver(maneuver_item)
-      subject.overall_relative_time.should eql(old_time + maneuver_item["TravelTime"])
     end
 
   end

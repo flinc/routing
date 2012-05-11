@@ -10,64 +10,30 @@ class Routing
       # @param [String] response
       #  A json response string of a NAVTEQ routing server.
       def initialize(response)
-        @response = JSON.parse(response)
+        response = JSON.parse(response)
+        check_for_error(response)
 
-        check_for_error!
-
-        # only take the first route
-        @route = self.response["Response"]["Route"].first
+        @route = response["Response"]["Route"].first
         @overall_covered_distance  = 0
         @overall_relative_time = 0
 
         self
       end
 
-      # The server response, as a Ruby hash.
-      #
-      # @return [Hash]
-      #  The response, converted from json into a Ruby hash.
-      attr_accessor :response
-
-      # Route from the response that will be parsed.
-      # This will always be the first route returned.
-      #
-      # @return [Hash]
-      #   The route, converted from json into a Ruby hash.
-      attr_accessor :route
-
-      # The overall distance of the parsed route in meters.
-      #
-      # @return [Fixnum]
-      #   Overall distance in meters.
-      attr_accessor :overall_covered_distance
-
-      # The overall relative time of the parsed route in seconds.
-      #
-      # @return [Fixnum]
-      #   Overall relative time in seconds.
-      attr_accessor :overall_relative_time
-
       # Converts the server response in an Array of {GeoPoint}s
       #
       # @return [Array<GeoPoint>]
       #   List of {GeoPoint}s that represent the calculated route.
       def to_geo_points
-        geo_points = []
-
-        legs = route["Leg"]
-
-        legs.each_with_index do |leg, index|
-          geo_points += parse_leg(leg)
-        end
+        legs = @route["Leg"]
+        geo_points = legs.map { |leg| parse_leg(leg) }.flatten
 
         # At last we add the destination point
         geo_points << parse_maneuver(legs.last["Maneuver"].last, waypoint: true)
-
-        # Search for the original input positions for every waypoint
-        geo_points.select(&:waypoint?).each{|wp| search_original_position(wp) }
-
         geo_points
       end
+
+      # private
 
       # Parses is single leg of the route including all its maneuvers.
       #
@@ -77,18 +43,13 @@ class Routing
       # @return [Array<GeoPoint>]
       #   List of {GeoPoint}s that represent the passed Leg.
       def parse_leg(leg)
-        leg_geo_points = []
-
-        maneuvers = leg["Maneuver"]
-
         # Skip the last maneuver as it is the same as the first one
         # of the next maneuver.
         # For the last leg we parse the last maneuver right at the end
-        maneuvers[0...-1].each do |maneuver|
-          leg_geo_points << parse_maneuver(maneuver, :waypoint => (maneuver == maneuvers.first))
+        maneuvers = leg["Maneuver"][0...-1]
+        maneuvers.map do |maneuver|
+          parse_maneuver(maneuver, :waypoint => (maneuver == maneuvers.first))
         end
-
-        leg_geo_points
       end
 
       # Parses is single maneuver of a route leg.
@@ -102,17 +63,19 @@ class Routing
       # @return [GeoPoint]
       #   A {GeoPoint} that represents the passed maneuver.
       def parse_maneuver(maneuver, attributes = {})
-        geopoint = ::Routing::GeoPoint.new attributes.merge({
+        geo_point = ::Routing::GeoPoint.new attributes.merge({
           lat: maneuver["Position"]["Latitude"],
           lng: maneuver["Position"]["Longitude"],
-          relative_time: overall_relative_time.to_i,
-          distance: overall_covered_distance.to_i
+          relative_time: @overall_relative_time,
+          distance: @overall_covered_distance
         })
 
-        @overall_relative_time += maneuver["TravelTime"]
-        @overall_covered_distance += maneuver["Length"]
+        @overall_relative_time += maneuver["TravelTime"].to_i
+        @overall_covered_distance += maneuver["Length"].to_i
 
-        geopoint
+        search_original_position(geo_point) if geo_point.waypoint?
+
+        geo_point
       end
 
       # Matches a parsed {GeoPoint} of the route response
@@ -127,12 +90,10 @@ class Routing
       #
       # @raise [NoMatchingMappedPositionFound] If no matching original position is found.
       def search_original_position(geo_point)
-        waypoints = route["Waypoint"]
-        matching_waypoint = route["Waypoint"].select do |waypoint|
-          waypoint["MappedPosition"]["Latitude"] == geo_point.lat && waypoint["MappedPosition"]["Longitude"] == geo_point.lng
-        end
-
-        matching_waypoint = matching_waypoint.first or raise NoMatchingMappedPositionFound
+        matching_waypoint = @route["Waypoint"].detect do |waypoint|
+          waypoint["MappedPosition"]["Latitude"]  == geo_point.lat && 
+          waypoint["MappedPosition"]["Longitude"] == geo_point.lng
+        end or raise NoMatchingMappedPositionFound
 
         geo_point.original_lat = matching_waypoint["OriginalPosition"]["Latitude"]
         geo_point.original_lng = matching_waypoint["OriginalPosition"]["Longitude"]
@@ -140,11 +101,9 @@ class Routing
         geo_point
       end
 
-      private
-
-      def check_for_error!
-        if @response['Error']
-          raise Routing::Parser::RoutingFailed.new "#{@response['Error']['type']}(#{@response['Error']['subtype']}) - #{@response['Error']['Details']}"
+      def check_for_error(response)
+        if error = response['Error']
+          raise Routing::Parser::RoutingFailed.new("#{error['type']}(#{error['subtype']}) - #{error['Details']}")
         end
       end
 
