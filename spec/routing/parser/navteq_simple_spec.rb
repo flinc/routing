@@ -3,23 +3,7 @@ require 'json'
 
 describe Routing::Parser::NavteqSimple do
 
-  let(:geo_point_array) do
-    [
-      mock(lat: 49.9580, lng: 8.9610),
-      mock(lat: 49.8634, lng: 8.7523),
-      mock(lat: 49.8752, lng: 8.6540)
-    ]
-  end
-
-  let(:response) { fixture('navteq/response.json') }
-  let(:json_response) { JSON.parse(response) }
-  subject { described_class.new(response) }
-
-  let(:maneuver_item) { json_response["Response"]["Route"].first["Leg"].first["Maneuver"].first }
-  let(:parsed_maneuver_item) { subject.parse_maneuver(maneuver_item) }
-
-  context 'parsing an error from the server' do
-
+  context 'with a error response' do
     let(:error_response) { fixture('navteq/error_response.json') }
 
     it 'should throw an RoutingFailed error' do
@@ -27,76 +11,71 @@ describe Routing::Parser::NavteqSimple do
     end
   end
 
-  describe '#to_geo_points' do
-
-    it 'returns geopoints' do
-      subject.to_geo_points.each { |point| point.should be_a(::Routing::GeoPoint) }
-    end
-
-    describe 'number of geo points' do
-      let(:leg_size) { json_response["Response"]["Route"].first["Leg"].size }
-      let(:leg_touching_point_size) { leg_size - 1 }
-      let(:maneuver_size) { json_response["Response"]["Route"].first["Leg"].inject(0) { |sum, leg| sum + leg["Maneuver"].size } }
-
-      it 'has the length of all maneuvers minus the duplicate ones at the touching points' do
-        subject.to_geo_points.should have(maneuver_size - leg_touching_point_size).geo_points
-      end
-
-      it 'includes the same number of waypoints as passed in' do
-        subject.to_geo_points.select(&:waypoint?).should have(geo_point_array.size).geo_points
+  context 'with a successful routing response' do
+    let(:response) { fixture('navteq/response.json') }
+    let(:json_response) { JSON.parse(response) }
+    let(:original_geo_points) do
+      json_response['Response']['Route'].first['Waypoint'].collect do |waypoint|
+        mock({
+          lat: waypoint['OriginalPosition']['Latitude'],
+          lng: waypoint['OriginalPosition']['Longitude']
+        })
       end
     end
+
+    describe '#to_geo_points' do
+      subject { described_class.new(response).to_geo_points }
+
+      it 'returns geopoints' do
+        subject.each { |point| point.should be_a(::Routing::GeoPoint) }
+      end
+
+      describe 'number of geo points' do
+        let(:leg_size) { json_response["Response"]["Route"].first["Leg"].size }
+        let(:leg_touching_point_size) { leg_size - 1 }
+        let(:maneuver_size) { json_response["Response"]["Route"].first["Leg"].inject(0) { |sum, leg| sum + leg["Maneuver"].size } }
+
+        it 'has the length of all maneuvers minus the duplicate ones at the touching points' do
+          should have(maneuver_size - leg_touching_point_size).geo_points
+        end
+      end
+
+      describe 'coordinates' do
+        it 'sets the calculated latitude and longitude for each geo point' do
+          subject.each do |geo_point|
+            geo_point.lat.should be
+            geo_point.lng.should be
+          end
+        end
+      end
+
+      describe 'original waypoints' do
+        subject { described_class.new(response).to_geo_points.select(&:waypoint?) }
+
+        it 'includes the same number of waypoints as passed in' do
+          should have(original_geo_points.size).geo_points
+        end
+
+        it 'sets original_lat and original_lng on the waypoints' do
+          subject.each_with_index do |geo_point, index|
+            geo_point.original_lat.should eq(original_geo_points[index].lat)
+            geo_point.original_lng.should eq(original_geo_points[index].lng)
+          end
+        end
+
+        context 'when response does not contain the original waypoints' do
+          let(:response) do
+            corrupted_response = JSON.parse(fixture('navteq/response.json'))
+            corrupted_response['Response']['Route'].first['Waypoint'].first['MappedPosition']['Latitude'] += 0.1
+            corrupted_response['Response']['Route'].first['Waypoint'].first['MappedPosition']['Longitude'] += 0.1
+            JSON.dump(corrupted_response)
+          end
+
+          it 'raises an exception if no matching original position was found' do
+            expect { subject }.to raise_error(Routing::Parser::NoMatchingMappedPositionFound)
+          end
+        end
+      end
+    end
   end
-
-  describe '#parse_leg' do
-    let(:parsed_leg) { subject.parse_leg(json_response["Response"]["Route"].first["Leg"].first) }
-
-    it 'collects all maneuvers as geo points' do
-       parsed_leg.each { |point| point.should be_a(::Routing::GeoPoint) }
-    end
-
-    it 'leaves out the first maneuver' do
-      parsed_leg.size.should == json_response["Response"]["Route"].first["Leg"].first["Maneuver"].size - 1
-    end
-
-    it 'marks only the first maneuver as waypoint' do
-      parsed_leg.first.should be_waypoint
-      parsed_leg.last.should_not be_waypoint
-    end
-
-  end
-
-  describe '#parse_maneuver' do
-
-    it 'returns a GeoPoint for a passed maneuver Hash' do
-      parsed_maneuver_item.should be_a(Routing::GeoPoint)
-    end
-
-    it 'uses the lat value of the passed maneuver Hash' do
-      subject.parse_maneuver(maneuver_item).lat.should be maneuver_item["Position"]["Latitude"]
-    end
-
-    it 'uses the lng value of the passed maneuver Hash' do
-      subject.parse_maneuver(maneuver_item).lng.should be maneuver_item["Position"]["Longitude"]
-    end
-
-    it 'merges additionally passed attributes' do
-      subject.parse_maneuver(maneuver_item, waypoint: true).waypoint.should be
-    end
-
-  end
-
-  describe '#search_original_position' do
-
-    it 'enriches a geo point with its original input position' do
-      subject.search_original_position(parsed_maneuver_item).original_lat.should eql(geo_point_array.first.lat)
-      subject.search_original_position(parsed_maneuver_item).original_lng.should eql(geo_point_array.first.lng)
-    end
-
-    it 'raises an exception if no matching original position was found' do
-      lambda{ subject.search_original_position(Routing::GeoPoint.new(lat: 0, lng: 0)) }.should raise_error(Routing::Parser::NoMatchingMappedPositionFound)
-    end
-
-  end
-
 end

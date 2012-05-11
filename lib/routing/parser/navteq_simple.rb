@@ -33,7 +33,7 @@ class Routing
         geo_points
       end
 
-      # private
+      private
 
       # Parses is single leg of the route including all its maneuvers.
       #
