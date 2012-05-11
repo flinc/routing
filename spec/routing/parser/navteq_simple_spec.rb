@@ -11,16 +11,7 @@ describe Routing::Parser::NavteqSimple do
     ]
   end
 
-  let(:response) do
-    # route = Routing::Adapter::Navteq.new.send :get, geo_point_array
-    # File.open("./spec/fixtures/navteq/response.json", 'w') {|f| f.write(route.to_json) }
-    File.open("./spec/fixtures/navteq/response.json").read
-  end
-
-  let(:error_response) do
-    File.open("./spec/fixtures/navteq/error_response.json").read
-  end
-
+  let(:response) { fixture('navteq/response.json') }
   subject{ described_class.new(response) }
 
   let(:parsed_leg) { subject.parse_leg(subject.route["Leg"].first) }
@@ -40,6 +31,7 @@ describe Routing::Parser::NavteqSimple do
 
   context 'parsing an error from the server' do
 
+    let(:error_response) { fixture('navteq/error_response.json') }
 
     it 'should throw an RoutingFailed error' do
       lambda{ described_class.new(error_response) }.should raise_error(Routing::Parser::RoutingFailed)
