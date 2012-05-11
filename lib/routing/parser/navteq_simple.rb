@@ -16,8 +16,6 @@ class Routing
         @route = response["Response"]["Route"].first
         @overall_covered_distance  = 0
         @overall_relative_time = 0
-
-        self
       end
 
       # Converts the server response in an Array of {GeoPoint}s
