@@ -21,7 +21,6 @@ class Routing
           request.url(options[:service_path])
           request.params = default_params.merge(geo_points_to_params(geo_points))
         end
-
         parse(response.body)
       end
 
@@ -48,7 +47,6 @@ class Routing
       def connection
         @connection ||= Faraday.new(:url => options[:host]) do |builder|
           builder.request  :url_encoded
-          builder.response :logger
           builder.adapter  :net_http
         end
       end
