@@ -1,0 +1,17 @@
+{
+    "type": "ApplicationError",
+    "subtype": "NoRouteFound",
+    "details": "Error is NGEO_ERROR_ROUTE_NO_END_POINT",
+    "additionalData": [
+        {
+            "key": "error_code",
+            "value": "NGEO_ERROR_ROUTE_NO_END_POINT"
+        }
+    ],
+    "metaInfo": {
+        "timestamp": "2014-02-20T08:49:26.399Z",
+        "mapVersion": "8.30.53.153",
+        "moduleVersion": "7.2.42.0_CD-902_1",
+        "interfaceVersion": "2.4.37"
+    }
+}

@@ -7,6 +7,7 @@ class Routing
   module Parser
 
     autoload :NavteqSimple, "routing/parser/navteq_simple"
+    autoload :HereSimple, "routing/parser/here_simple"
 
     # This error is thrown by the parsers if a calculated waypoint can't be matched
     # to one of the initial passed geo points that were routed.

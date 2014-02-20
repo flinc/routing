@@ -1,0 +1,245 @@
+{
+    "response": {
+        "metaInfo": {
+            "timestamp": "2014-02-20T08:48:17.028Z",
+            "mapVersion": "8.30.53.153",
+            "moduleVersion": "7.2.42.0_CD-902_1",
+            "interfaceVersion": "2.4.37"
+        },
+        "route": [
+            {
+                "waypoint": [
+                    {
+                        "linkId": "+1600996215040705549",
+                        "mappedPosition": {
+                            "latitude": 49.9019153,
+                            "longitude": 8.8588599
+                        },
+                        "originalPosition": {
+                            "latitude": 49.90261,
+                            "longitude": 8.85866
+                        },
+                        "type": "stopOver",
+                        "spot": 0.4035088,
+                        "sideOfStreet": "left",
+                        "mappedRoadName": "Hohe Straße",
+                        "label": "Hohe Straße",
+                        "shapeIndex": 0
+                    },
+                    {
+                        "linkId": "-1601136969708929748",
+                        "mappedPosition": {
+                            "latitude": 49.9533103,
+                            "longitude": 8.9529667
+                        },
+                        "originalPosition": {
+                            "latitude": 49.9532,
+                            "longitude": 8.95293
+                        },
+                        "type": "stopOver",
+                        "spot": 0.3484848,
+                        "sideOfStreet": "right",
+                        "mappedRoadName": "Südring",
+                        "label": "Südring",
+                        "shapeIndex": 55
+                    }
+                ],
+                "mode": {
+                    "type": "fastest",
+                    "transportModes": [
+                        "car"
+                    ],
+                    "trafficMode": "default",
+                    "feature": []
+                },
+                "leg": [
+                    {
+                        "start": {
+                            "linkId": "+1600996215040705549",
+                            "mappedPosition": {
+                                "latitude": 49.9019153,
+                                "longitude": 8.8588599
+                            },
+                            "originalPosition": {
+                                "latitude": 49.90261,
+                                "longitude": 8.85866
+                            },
+                            "type": "stopOver",
+                            "spot": 0.4035088,
+                            "sideOfStreet": "left",
+                            "mappedRoadName": "Hohe Straße",
+                            "label": "Hohe Straße",
+                            "shapeIndex": 0
+                        },
+                        "end": {
+                            "linkId": "-1601136969708929748",
+                            "mappedPosition": {
+                                "latitude": 49.9533103,
+                                "longitude": 8.9529667
+                            },
+                            "originalPosition": {
+                                "latitude": 49.9532,
+                                "longitude": 8.95293
+                            },
+                            "type": "stopOver",
+                            "spot": 0.3484848,
+                            "sideOfStreet": "right",
+                            "mappedRoadName": "Südring",
+                            "label": "Südring",
+                            "shapeIndex": 55
+                        },
+                        "length": 9117,
+                        "travelTime": 592,
+                        "maneuver": [
+                            {
+                                "position": {
+                                    "latitude": 49.9019153,
+                                    "longitude": 8.8588599
+                                },
+                                "instruction": "Fahren Sie auf <span class=\"street\">Hohe Straße</span> nach <span class=\"heading\">Osten</span>. <span class=\"distance-description\">Fahren Sie <span class=\"length\">159 m</span></span>.",
+                                "travelTime": 35,
+                                "length": 159,
+                                "time": "2014-02-20T08:48:19Z",
+                                "id": "M1",
+                                "_type": "PrivateTransportManeuverType"
+                            },
+                            {
+                                "position": {
+                                    "latitude": 49.9020696,
+                                    "longitude": 8.8610744
+                                },
+                                "instruction": "Biegen Sie <span class=\"direction\">links</span> ab auf die <span class=\"number\">K128</span>. <span class=\"distance-description\">Fahren Sie <span class=\"length\">1.1 km</span></span>.",
+                                "travelTime": 88,
+                                "length": 1103,
+                                "time": "2014-02-20T08:48:54Z",
+                                "id": "M2",
+                                "_type": "PrivateTransportManeuverType"
+                            },
+                            {
+                                "position": {
+                                    "latitude": 49.9085712,
+                                    "longitude": 8.8707948
+                                },
+                                "instruction": "Biegen Sie <span class=\"direction\">links</span> ab auf die <span class=\"number\">B26</span>. <span class=\"distance-description\">Fahren Sie <span class=\"length\">7.8 km</span></span>.",
+                                "travelTime": 455,
+                                "length": 7763,
+                                "time": "2014-02-20T08:50:22Z",
+                                "id": "M3",
+                                "_type": "PrivateTransportManeuverType"
+                            },
+                            {
+                                "position": {
+                                    "latitude": 49.9537396,
+                                    "longitude": 8.9518619
+                                },
+                                "instruction": "Biegen Sie <span class=\"direction\">rechts</span> ab auf <span class=\"next-street\">Südring</span>. <span class=\"distance-description\">Fahren Sie <span class=\"length\">92 m</span></span>.",
+                                "travelTime": 14,
+                                "length": 92,
+                                "time": "2014-02-20T08:57:57Z",
+                                "id": "M4",
+                                "_type": "PrivateTransportManeuverType"
+                            },
+                            {
+                                "position": {
+                                    "latitude": 49.9533103,
+                                    "longitude": 8.9529667
+                                },
+                                "instruction": "Sie erreichen <span class=\"street\">Südring</span>. Ihr Ziel liegt auf der rechten Seite.",
+                                "travelTime": 0,
+                                "length": 0,
+                                "time": "2014-02-20T08:58:11Z",
+                                "id": "M5",
+                                "_type": "PrivateTransportManeuverType"
+                            }
+                        ],
+                        "boundingBox": {
+                            "topLeft": {
+                                "latitude": 49.9537396,
+                                "longitude": 8.8588599
+                            },
+                            "bottomRight": {
+                                "latitude": 49.9019153,
+                                "longitude": 8.9529667
+                            }
+                        },
+                        "shape": [
+                            "49.9019153,8.8588599",
+                            "49.901973,8.8593256",
+                            "49.9020696,8.8610744",
+                            "49.9025095,8.8611817",
+                            "49.9029493,8.861289",
+                            "49.9037647,8.8615787",
+                            "49.9040115,8.8616967",
+                            "49.904741,8.8621795",
+                            "49.90502,8.862437",
+                            "49.9054062,8.8628447",
+                            "49.9057817,8.8632846",
+                            "49.9061894,8.8638747",
+                            "49.9069083,8.8651192",
+                            "49.9071443,8.8655806",
+                            "49.9073482,8.8660741",
+                            "49.9074447,8.8663852",
+                            "49.9075949,8.8672328",
+                            "49.9076915,8.8675761",
+                            "49.907949,8.868295",
+                            "49.9086678,8.8700974",
+                            "49.9087322,8.8702905",
+                            "49.9087429,8.870548",
+                            "49.9087214,8.8706338",
+                            "49.9086571,8.8707197",
+                            "49.9085712,8.8707948",
+                            "49.9086678,8.8709557",
+                            "49.9101484,8.8739598",
+                            "49.9104702,8.8746464",
+                            "49.9114037,8.8769531",
+                            "49.9127448,8.8803542",
+                            "49.913528,8.8822746",
+                            "49.9138498,8.882972",
+                            "49.9140751,8.883369",
+                            "49.9143648,8.8838089",
+                            "49.914633,8.8841629",
+                            "49.9154699,8.8850641",
+                            "49.9202979,8.8900208",
+                            "49.9205768,8.8903213",
+                            "49.9208665,8.8907182",
+                            "49.9210382,8.8910079",
+                            "49.9212849,8.8915551",
+                            "49.9214458,8.8921237",
+                            "49.9215531,8.8925743",
+                            "49.9216604,8.8934648",
+                            "49.9217892,8.8952565",
+                            "49.9218857,8.8959432",
+                            "49.921993,8.8962972",
+                            "49.9222076,8.8968337",
+                            "49.942764,8.9327645",
+                            "49.9496412,8.9447272",
+                            "49.9522698,8.9493299",
+                            "49.9536109,8.9516366",
+                            "49.9537396,8.9518619",
+                            "49.9534822,8.9524198",
+                            "49.9533641,8.9527309",
+                            "49.9533103,8.9529667"
+                        ],
+                        "firstPoint": 0,
+                        "lastPoint": 55,
+                        "trafficTime": 667,
+                        "baseTime": 592,
+                        "summary": {
+                            "distance": 9117,
+                            "trafficTime": 667,
+                            "baseTime": 592,
+                            "travelTime": 592
+                        }
+                    }
+                ],
+                "summary": {
+                    "distance": 9117,
+                    "trafficTime": 667,
+                    "baseTime": 592,
+                    "travelTime": 592
+                }
+            }
+        ],
+        "language": "de-de"
+    }
+}

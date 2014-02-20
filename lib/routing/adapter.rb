@@ -15,6 +15,7 @@ class Routing
   # as only parameters and will return an Array of {Routing::GeoPoint}s when the calculation is done.
   module Adapter
 
+    autoload :Here, "routing/adapter/here"
     autoload :Navteq, "routing/adapter/navteq"
     autoload :Test, "routing/adapter/test"
 
