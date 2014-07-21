@@ -14,7 +14,7 @@ describe Routing::Adapter::Here do
 
   let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
 
-  subject { described_class.new(options) }
+  subject(:adapter) { described_class.new(options) }
 
   before do
     connection.stub(:get).and_yield(request).and_return(response)
@@ -28,36 +28,51 @@ describe Routing::Adapter::Here do
 
     it 'allows setting the host' do
       Faraday.should_receive(:new).with(:url => 'http://other.com')
-      options.merge!(:host => 'http://other.com')
+
+      adapter = described_class.new(options.merge!(:host => 'http://other.com'))
+      adapter.calculate(geo_points)
     end
 
     it 'allows setting the default params' do
       params = { :hello => "world" }
-      options.merge!(:default_params => params)
       request.should_receive(:params=).with(hash_including(params))
+
+      adapter = described_class.new(options.merge(:default_params => params))
+      adapter.calculate(geo_points)
     end
 
     it 'sets the api credentials' do
       request.should_receive(:params=).with(hash_including({ :app_id => "123", :app_code => "456" }))
+      adapter.calculate(geo_points)
     end
 
     it 'should allow setting the service path' do
-      options.merge!(:service_path => '/some/path.json')
       request.should_receive(:url).with('/some/path.json')
+
+      adapter = described_class.new(options.merge(:service_path => '/some/path.json'))
+      adapter.calculate(geo_points)
     end
 
     it 'should use a default service path when none is given' do
       request.should_receive(:url).with('/routing/7.2/calculateroute.json')
+
+      adapter = described_class.new(options)
+      adapter.calculate(geo_points)
     end
 
     it 'should allow setting the parser' do
-      options.merge!(:parser => parser_class)
       parser_class.should_receive(:new)
+
+      adapter = described_class.new(options.merge(:parser => parser_class))
+      adapter.calculate(geo_points)
     end
 
     it 'should use a default parser when none is given' do
-      options.delete(:parser)
       Routing::Parser::HereSimple.should_receive(:new).and_return(parser)
+
+      options.delete(:parser)
+      adapter = described_class.new(options)
+      adapter.calculate(geo_points)
     end
 
     it 'ignores unknown options' do
@@ -69,12 +84,13 @@ describe Routing::Adapter::Here do
     it 'passes the response to the parser' do
       response.stub(:body => '...')
       parser_class.should_receive(:new).with('...')
+      adapter.calculate(geo_points)
     end
 
     it 'should return the parser\'s result' do
       result = [double, double, double]
       parser.stub(:to_geo_points => result)
-      subject.calculate(geo_points).should be(result)
+      adapter.calculate(geo_points).should be(result)
     end
 
     it 'should convert the geo points into a compatible format' do
@@ -83,6 +99,7 @@ describe Routing::Adapter::Here do
         'waypoint1' => 'geo!3,4',
         'waypoint2' => 'geo!5,6'
       })
+      adapter.calculate(geo_points)
     end
   end
 end
