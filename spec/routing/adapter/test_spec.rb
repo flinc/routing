@@ -12,15 +12,15 @@ describe Routing::Adapter::Test do
 
   describe '#calculate' do
 
-    let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
+    let(:geo_points) { [double(:lat => 1, :lng => 2), double(:lat => 3, :lng => 4), double(:lat => 5, :lng => 6)] }
 
     it 'returns an array of geopoints with values that are passed to the method' do
       subject.calculate(geo_points).each_with_index do |new_geo_point, index|
-        new_geo_point.lat.should eql(geo_points[index].lat)
-        new_geo_point.lng.should eql(geo_points[index].lng)
-        new_geo_point.original_lng.should eql(geo_points[index].lng)
-        new_geo_point.original_lng.should eql(geo_points[index].lng)
-        new_geo_point.should be_waypoint
+        expect(new_geo_point.lat).to eql(geo_points[index].lat)
+        expect(new_geo_point.lng).to eql(geo_points[index].lng)
+        expect(new_geo_point.original_lng).to eql(geo_points[index].lng)
+        expect(new_geo_point.original_lng).to eql(geo_points[index].lng)
+        expect(new_geo_point).to be_waypoint
       end
     end
 

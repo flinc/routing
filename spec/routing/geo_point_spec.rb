@@ -10,8 +10,15 @@ describe Routing::GeoPoint do
     context 'initialized with attributes' do
       subject { described_class.new(:lat => 1, :lng => 2) }
 
-      its(:lat) { should be(1) }
-      its(:lng) { should be(2) }
+      describe '#lat' do
+        subject { super().lat }
+        it { should be(1) }
+      end
+
+      describe '#lng' do
+        subject { super().lng }
+        it { should be(2) }
+      end
 
       it 'ignores passed attributes that dont exist' do
         expect { described_class.new(:hello => :world) }.to_not raise_error
