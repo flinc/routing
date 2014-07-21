@@ -25,7 +25,6 @@ class Routing
 
   end
 
-  attr_accessor :middlewares
   attr_reader :adapter
 
   # Creates a new instance of the routing class
@@ -36,6 +35,14 @@ class Routing
     @middlewares = []
 
     yield(self) if block_given?
+  end
+
+  # Returns a copy of the current middleware stack.
+  #
+  # @return [Array<Routing::Middleware>]
+  #   An array of all registered middlewares.
+  def middlewares
+    @middlewares.dup
   end
 
   # Calculates a route for the passed {GeoPoint}s.

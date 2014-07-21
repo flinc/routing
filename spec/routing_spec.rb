@@ -57,7 +57,6 @@ describe Routing do
   end
 
   context 'using the middleware' do
-
     it 'has an empty array of middlewares by default' do
        expect(subject.middlewares).to be_an(Array)
        expect(subject.middlewares.size).to eq(0)
@@ -68,14 +67,6 @@ describe Routing do
         subject.use(:hello)
         subject.use(:world)
         expect(subject.middlewares).to eq([:hello, :world])
-      end
-    end
-
-    describe '#middlewares' do
-      it 'replaces all middlewares' do
-        subject.use(:original)
-        subject.middlewares = :first, :second
-        expect(subject.middlewares).to eq([:first, :second])
       end
     end
   end
