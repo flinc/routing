@@ -26,6 +26,7 @@ class Routing
   end
 
   attr_accessor :middlewares
+  attr_reader :adapter
 
   # Creates a new instance of the routing class
   #
