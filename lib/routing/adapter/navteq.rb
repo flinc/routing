@@ -5,7 +5,7 @@ class Routing
     # Adapter for a NAVTEQ LBSP Routing Service v6 server.
     # It passes the {GeoPoint}s to the routing service and will return another
     # Array of {GeoPoint}s, representing the calculated route.
-    class Navteq < RESTAdapter
+    class Navteq < RestAdapter
       def self.default_params
         {
           departure:          Time.now.utc.iso8601,

@@ -4,7 +4,7 @@ require 'smart_properties'
 
 class Routing
   module Adapter
-    class RESTAdapter
+    class RestAdapter
       include SmartProperties
 
       property :scheme, converts: :to_str, accepts: ['http', 'https'], default: 'http', required: true
@@ -32,10 +32,11 @@ class Routing
         "%s://%s" % [scheme, host]
       end
 
-      def request(params)
+      def request(params = nil)
         connection.get do |request|
           request.url(path)
-          request.params = params
+          request.params = params if params
+          yield request if block_given?
         end
       end
 

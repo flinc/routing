@@ -5,7 +5,7 @@ class Routing
     # Adapter for a Nokia Here Routing Service v7 server.
     # It passes the {GeoPoint}s to the routing service and will return another
     # Array of {GeoPoint}s, representing the calculated route.
-    class Here < RESTAdapter
+    class Here < RestAdapter
       property :credentials, accepts: Hash
 
       def self.default_params
