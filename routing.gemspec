@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "faraday", ">= 0.7.0"
   gem.add_dependency "json"
+  gem.add_dependency "smart_properties", "~> 1.0"
   gem.add_development_dependency "rspec", ">= 2.11"
   gem.add_development_dependency "rake"
 

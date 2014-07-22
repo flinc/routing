@@ -5,11 +5,15 @@ describe Routing::Adapter::Here do
   let(:response) { double(:response).as_null_object }
   let(:request) { double(:request).as_null_object }
   let(:connection) { double(:connection).as_null_object }
-  let(:parser_class) { double(:parser_class, :new => parser) }
+  let(:parser_class) do
+    Class.new.tap do |klass|
+      klass.stub(:new => parser)
+    end
+  end
   let(:parser) { double(:parser).as_null_object }
-
+  let(:credentials) { {:app_id => "123", :app_code => "456"} }
   let(:options) do
-    { :parser => parser_class, :credentials => { :app_id => "123", :app_code => "456" } }
+    { :parser => parser_class, :credentials => credentials}
   end
 
   let(:geo_points) { [double(:lat => 1, :lng => 2), double(:lat => 3, :lng => 4), double(:lat => 5, :lng => 6)] }
@@ -29,7 +33,7 @@ describe Routing::Adapter::Here do
     it 'allows setting the host' do
       expect(Faraday).to receive(:new).with(:url => 'http://other.com')
 
-      adapter = described_class.new(options.merge!(:host => 'http://other.com'))
+      adapter = described_class.new(options.merge!(:host => 'other.com'))
       adapter.calculate(geo_points)
     end
 
@@ -37,7 +41,7 @@ describe Routing::Adapter::Here do
       params = { :hello => "world" }
       expect(request).to receive(:params=).with(hash_including(params))
 
-      adapter = described_class.new(options.merge(:default_params => params))
+      adapter = described_class.new(options.merge(:params => params))
       adapter.calculate(geo_points)
     end
 
@@ -49,7 +53,7 @@ describe Routing::Adapter::Here do
     it 'should allow setting the service path' do
       expect(request).to receive(:url).with('/some/path.json')
 
-      adapter = described_class.new(options.merge(:service_path => '/some/path.json'))
+      adapter = described_class.new(options.merge(:path => '/some/path.json'))
       adapter.calculate(geo_points)
     end
 
@@ -70,8 +74,7 @@ describe Routing::Adapter::Here do
     it 'should use a default parser when none is given' do
       expect(Routing::Parser::HereSimple).to receive(:new).and_return(parser)
 
-      options.delete(:parser)
-      adapter = described_class.new(options)
+      adapter = described_class.new(credentials: credentials)
       adapter.calculate(geo_points)
     end
 
