@@ -46,7 +46,7 @@ class Routing
         # For the last leg we parse the last maneuver right at the end
         maneuvers = leg["Maneuver"][0...-1]
         maneuvers.map do |maneuver|
-          parse_maneuver(maneuver, :waypoint => (maneuver == maneuvers.first))
+          parse_maneuver(maneuver, waypoint: (maneuver == maneuvers.first))
         end
       end
 
@@ -89,7 +89,7 @@ class Routing
       # @raise [NoMatchingMappedPositionFound] If no matching original position is found.
       def search_original_position(geo_point)
         matching_waypoint = @route["Waypoint"].detect do |waypoint|
-          waypoint["MappedPosition"]["Latitude"]  == geo_point.lat && 
+          waypoint["MappedPosition"]["Latitude"]  == geo_point.lat &&
           waypoint["MappedPosition"]["Longitude"] == geo_point.lng
         end or raise NoMatchingMappedPositionFound
 

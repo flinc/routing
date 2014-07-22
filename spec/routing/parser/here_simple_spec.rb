@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'json'
 
 describe Routing::Parser::HereSimple do
-
   context 'with a error response' do
     let(:error_response) { fixture('here/error_response.json') }
 

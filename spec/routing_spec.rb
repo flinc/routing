@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Routing do
-
   context 'creating a new instance' do
-
     let(:adapter) { double }
 
     it 'can be called without arguments' do
@@ -27,12 +25,11 @@ describe Routing do
     it 'passes itself to the configuration block' do
       described_class.new { |r| expect(r).to be_instance_of(described_class) }
     end
-
   end
 
   describe '#calculate' do
-    let(:geo_points) { [double(:lat => 1, :lng => 2), double(:lat => 3, :lng => 4), double(:lat => 5, :lng => 6)] }
-    let(:adapter) { double(:calculate => geo_points) }
+    let(:geo_points) { [double(lat: 1, lng: 2), double(lat: 3, lng: 4), double(lat: 5, lng: 6)] }
+    let(:adapter) { double(calculate: geo_points) }
 
     subject { described_class.new(adapter) }
 
