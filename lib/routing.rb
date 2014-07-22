@@ -16,11 +16,11 @@ class Routing
     attr_writer :default_adapter
 
     # The default adapter/routing service that is used, if no one is specified.
-    # Currently this is {Routing::Adapter::Navteq}.
+    # Currently this is {Routing::Adapter::Here}.
     #
     # @return [Object] Current default adapter.
     def default_adapter
-      @default_adapter ||= Routing::Adapter::Navteq.new
+      @default_adapter ||= Routing::Adapter::Here.new
     end
 
   end
