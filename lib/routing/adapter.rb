@@ -17,6 +17,7 @@ class Routing
 
     autoload :Here, "routing/adapter/here"
     autoload :Navteq, "routing/adapter/navteq"
+    autoload :RestAdapter, "routing/adapter/rest_adapter"
     autoload :Test, "routing/adapter/test"
 
   end

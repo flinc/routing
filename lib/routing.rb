@@ -16,16 +16,16 @@ class Routing
     attr_writer :default_adapter
 
     # The default adapter/routing service that is used, if no one is specified.
-    # Currently this is {Routing::Adapter::Navteq}.
+    # Currently this is {Routing::Adapter::Here}.
     #
     # @return [Object] Current default adapter.
     def default_adapter
-      @default_adapter ||= Routing::Adapter::Navteq.new
+      @default_adapter ||= Routing::Adapter::Here.new
     end
 
   end
 
-  attr_accessor :middlewares
+  attr_reader :adapter
 
   # Creates a new instance of the routing class
   #
@@ -35,6 +35,14 @@ class Routing
     @middlewares = []
 
     yield(self) if block_given?
+  end
+
+  # Returns a copy of the current middleware stack.
+  #
+  # @return [Array<Routing::Middleware>]
+  #   An array of all registered middlewares.
+  def middlewares
+    @middlewares.dup
   end
 
   # Calculates a route for the passed {GeoPoint}s.

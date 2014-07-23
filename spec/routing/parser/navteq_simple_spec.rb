@@ -2,12 +2,11 @@ require 'spec_helper'
 require 'json'
 
 describe Routing::Parser::NavteqSimple do
-
   context 'with a error response' do
     let(:error_response) { fixture('navteq/error_response.json') }
 
     it 'should throw an RoutingFailed error' do
-      lambda{ described_class.new(error_response) }.should raise_error(Routing::Parser::RoutingFailed)
+      expect{ described_class.new(error_response) }.to raise_error(Routing::Parser::RoutingFailed)
     end
   end
 
@@ -16,7 +15,7 @@ describe Routing::Parser::NavteqSimple do
     let(:json_response) { JSON.parse(response) }
     let(:original_geo_points) do
       json_response['Response']['Route'].first['Waypoint'].collect do |waypoint|
-        mock({
+        double({
           lat: waypoint['OriginalPosition']['Latitude'],
           lng: waypoint['OriginalPosition']['Longitude']
         })
@@ -27,7 +26,7 @@ describe Routing::Parser::NavteqSimple do
       subject { described_class.new(response).to_geo_points }
 
       it 'returns geopoints' do
-        subject.each { |point| point.should be_a(::Routing::GeoPoint) }
+        subject.each { |point| expect(point).to be_a(::Routing::GeoPoint) }
       end
 
       describe 'number of geo points' do
@@ -36,15 +35,15 @@ describe Routing::Parser::NavteqSimple do
         let(:maneuver_size) { json_response["Response"]["Route"].first["Leg"].inject(0) { |sum, leg| sum + leg["Maneuver"].size } }
 
         it 'has the length of all maneuvers minus the duplicate ones at the touching points' do
-          should have(maneuver_size - leg_touching_point_size).geo_points
+          expect(subject.size).to eq(maneuver_size - leg_touching_point_size)
         end
       end
 
       describe 'coordinates' do
         it 'sets the calculated latitude and longitude for each geo point' do
           subject.each do |geo_point|
-            geo_point.lat.should be
-            geo_point.lng.should be
+            expect(geo_point.lat).to be
+            expect(geo_point.lng).to be
           end
         end
       end
@@ -53,13 +52,13 @@ describe Routing::Parser::NavteqSimple do
         subject { described_class.new(response).to_geo_points.select(&:waypoint?) }
 
         it 'includes the same number of waypoints as passed in' do
-          should have(original_geo_points.size).geo_points
+          expect(subject.size).to eq(original_geo_points.size)
         end
 
         it 'sets original_lat and original_lng on the waypoints' do
           subject.each_with_index do |geo_point, index|
-            geo_point.original_lat.should eq(original_geo_points[index].lat)
-            geo_point.original_lng.should eq(original_geo_points[index].lng)
+            expect(geo_point.original_lat).to eq(original_geo_points[index].lat)
+            expect(geo_point.original_lng).to eq(original_geo_points[index].lng)
           end
         end
 

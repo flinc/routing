@@ -1,23 +1,21 @@
 require 'spec_helper'
 
 describe Routing do
-
   context 'creating a new instance' do
-
-    let(:adapter) { mock }
+    let(:adapter) { double }
 
     it 'can be called without arguments' do
       expect { Routing.new }.to_not raise_error
     end
 
     it 'uses the default adapter, if no adapter is passed' do
-      described_class.default_adapter.should_receive(:calculate)
-      subject.calculate(stub, stub)
+      expect(described_class.default_adapter).to receive(:calculate)
+      subject.calculate(double, double)
     end
 
     it 'takes the passed adapter, if given' do
-      adapter.should_receive(:calculate)
-      described_class.new(adapter).calculate(stub, stub)
+      expect(adapter).to receive(:calculate)
+      described_class.new(adapter).calculate(double, double)
     end
 
     it 'takes a configuration block' do
@@ -25,57 +23,47 @@ describe Routing do
     end
 
     it 'passes itself to the configuration block' do
-      described_class.new { |r| r.should be_instance_of(described_class) }
+      described_class.new { |r| expect(r).to be_instance_of(described_class) }
     end
-
   end
 
   describe '#calculate' do
-    let(:geo_points) { [stub(:lat => 1, :lng => 2), stub(:lat => 3, :lng => 4), stub(:lat => 5, :lng => 6)] }
-    let(:adapter) { mock(:calculate => geo_points) }
+    let(:geo_points) { [double(lat: 1, lng: 2), double(lat: 3, lng: 4), double(lat: 5, lng: 6)] }
+    let(:adapter) { double(calculate: geo_points) }
 
     subject { described_class.new(adapter) }
 
     it 'should call the adapter' do
-      adapter.should_receive(:calculate).with(geo_points)
+      expect(adapter).to receive(:calculate).with(geo_points)
       subject.calculate(geo_points)
     end
 
     it 'should call each middleware in the given order' do
       first_middleware = double(Routing::Middleware)
-      first_middleware.should_receive(:calculate).
+      expect(first_middleware).to receive(:calculate).
         with(geo_points).and_yield(geo_points)
 
       second_middleware = double(Routing::Middleware)
-      second_middleware.should_receive(:calculate).
+      expect(second_middleware).to receive(:calculate).
         with(geo_points)
 
-      subject.stub(:middlewares).and_return([first_middleware, second_middleware])
+      allow(subject).to receive(:middlewares).and_return([first_middleware, second_middleware])
 
       subject.calculate(geo_points)
     end
   end
 
   context 'using the middleware' do
-
     it 'has an empty array of middlewares by default' do
-       subject.middlewares.should be_an(Array)
-       subject.should have(0).middlewares
+       expect(subject.middlewares).to be_an(Array)
+       expect(subject.middlewares.size).to eq(0)
     end
 
     describe '#use' do
       it 'appends the new middleware to the stack' do
         subject.use(:hello)
         subject.use(:world)
-        subject.middlewares.should == [:hello, :world]
-      end
-    end
-
-    describe '#middlewares' do
-      it 'replaces all middlewares' do
-        subject.use(:original)
-        subject.middlewares = :first, :second
-        subject.middlewares.should == [:first, :second]
+        expect(subject.middlewares).to eq([:hello, :world])
       end
     end
   end
