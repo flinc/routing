@@ -30,5 +30,17 @@ class Routing
       !!waypoint
     end
 
+    def fetch(key, *args)
+      raise ArgumentError, "wrong number of arguments (#{args.length + 1} for 1..2)" if args.length > 1
+
+      case key
+      when *self.class.members
+        send(key)
+      else
+        return yield(key) if block_given?
+        return args.first unless args.empty?
+        raise KeyError, "key #{key} not found"
+      end
+    end
   end
 end
