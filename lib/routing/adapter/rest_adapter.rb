@@ -52,7 +52,7 @@ class Routing
       end
 
       def convert_geo_points_to_params(geo_points)
-        Hash[geo_points.each_with_index.map { |point, i| [ "waypoint#{i}", "geo!#{point.lat},#{point.lng}" ] }]
+        Hash[geo_points.each_with_index.map { |point, i| [ "waypoint#{i}", "geo!#{point.fetch(:lat)},#{point.fetch(:lng)}" ] }]
       end
     end
   end
