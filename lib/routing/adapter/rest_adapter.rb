@@ -52,7 +52,14 @@ class Routing
       end
 
       def convert_geo_points_to_params(geo_points)
-        Hash[geo_points.each_with_index.map { |point, i| [ "waypoint#{i}", "geo!#{point.lat},#{point.lng}" ] }]
+        Hash[geo_points.each_with_index.map do |point, i|
+          lat = point[:lat]
+          lng = point[:lng]
+
+          raise ArgumentError, "latitude or longitude missing" unless lat && lng
+
+          ["waypoint#{i}", "geo!#{lat},#{lng}"]
+        end]
       end
     end
   end

@@ -7,11 +7,16 @@ class Routing
 
       def calculate(geo_points)
         geo_points.collect do |point|
+          lat = point[:lat]
+          lng = point[:lng]
+
+          raise ArgumentError, "latitude or longitude missing" unless lat && lng
+
           GeoPoint.new(
-            :lat => point.lat,
-            :lng => point.lng,
-            :original_lat => point.lat,
-            :original_lng => point.lng,
+            :lat => lat,
+            :lng => lng,
+            :original_lat => lat,
+            :original_lng => lng,
             :relative_time => 100,
             :distance => 100,
             :waypoint => true

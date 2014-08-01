@@ -16,7 +16,13 @@ describe Routing::Adapter::Here do
     { :parser => parser_class, :credentials => credentials}
   end
 
-  let(:geo_points) { [double(:lat => 1, :lng => 2), double(:lat => 3, :lng => 4), double(:lat => 5, :lng => 6)] }
+  let(:geo_points) do
+    [
+      Routing::GeoPoint.new(lat: 1, lng: 2),
+      Routing::GeoPoint.new(lat: 3, lng: 4),
+      Routing::GeoPoint.new(lat: 5, lng: 6)
+    ]
+  end
 
   subject(:adapter) { described_class.new(options) }
 
