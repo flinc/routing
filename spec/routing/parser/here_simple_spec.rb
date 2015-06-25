@@ -77,4 +77,25 @@ describe Routing::Parser::HereSimple do
       end
     end
   end
+
+  # The fixture used here shows a response from the Here routing service that contains rounding
+  # errors in the following fields:
+  # route[] > waypoint[] > mappedPosition > latitude/longitude
+  # route[] > leg[] > maneuver > position > latitude/longitude
+  #
+  # This two fields are supposed to be the same - yet, they sometimes differ in the 7th decimal place,
+  # which caused the parser to fail. This spec assures the parser still works.
+  context 'with a successful, but very large routing response that includes rounding errors' do
+    let(:response) { fixture('here/response_with_rounding_errors.json') }
+    let(:json_response) { JSON.parse(response) }
+
+    describe '#to_geo_points' do
+      subject { described_class.new(response).to_geo_points }
+
+      it 'returns geopoints' do
+        subject.each { |point| expect(point).to be_a(::Routing::GeoPoint) }
+      end
+    end
+  end
+
 end

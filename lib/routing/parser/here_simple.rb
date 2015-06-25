@@ -89,8 +89,8 @@ class Routing
       # @raise [NoMatchingMappedPositionFound] If no matching original position is found.
       def search_original_position(geo_point)
         matching_waypoint = @route["waypoint"].detect do |waypoint|
-          waypoint["mappedPosition"]["latitude"]  == geo_point.lat &&
-          waypoint["mappedPosition"]["longitude"] == geo_point.lng
+          truncate(waypoint["mappedPosition"]["latitude"])  == truncate(geo_point.lat) &&
+          truncate(waypoint["mappedPosition"]["longitude"]) == truncate(geo_point.lng)
         end or raise NoMatchingMappedPositionFound
 
         geo_point.original_lat = matching_waypoint["originalPosition"]["latitude"]
@@ -103,6 +103,12 @@ class Routing
         if error = response['type'] && response['type'][/error/i]
           raise Routing::Parser::RoutingFailed.new("#{response['type']}(#{response['subtype']}) - #{response['details']}")
         end
+      end
+
+      # Truncates (instead of rounding/ceiling/flooring) a float to the given precision.
+      # Important, because Here sometimes has rounding errors in the 7th decimal place of a lat/lng.
+      def truncate(float, precision = 6)
+        Integer(float * (10**precision)) / Float(10**precision)
       end
 
     end
