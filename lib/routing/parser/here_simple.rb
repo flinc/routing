@@ -14,6 +14,7 @@ class Routing
         check_for_error(response)
 
         @route = response["response"]["route"].first
+        @waypoints = @route["waypoint"].dup
         @overall_covered_distance  = 0
         @overall_relative_time = 0
       end
@@ -88,13 +89,19 @@ class Routing
       #
       # @raise [NoMatchingMappedPositionFound] If no matching original position is found.
       def search_original_position(geo_point)
-        matching_waypoint = @route["waypoint"].detect do |waypoint|
-          truncate(waypoint["mappedPosition"]["latitude"])  == truncate(geo_point.lat) &&
-          truncate(waypoint["mappedPosition"]["longitude"]) == truncate(geo_point.lng)
-        end or raise NoMatchingMappedPositionFound
+        next_waypoint = @waypoints.shift
 
-        geo_point.original_lat = matching_waypoint["originalPosition"]["latitude"]
-        geo_point.original_lng = matching_waypoint["originalPosition"]["longitude"]
+        if next_waypoint.nil?
+          raise NoMatchingMappedPositionFound.new("No more waypoints available")
+        end
+
+        if truncate(next_waypoint["mappedPosition"]["latitude"], 4) != truncate(geo_point.lat, 4) ||
+          truncate(next_waypoint["mappedPosition"]["longitude"], 4) != truncate(geo_point.lng, 4)
+          raise NoMatchingMappedPositionFound.new("Mapped waypoints did not match with geopoint")
+        end
+
+        geo_point.original_lat = next_waypoint["originalPosition"]["latitude"]
+        geo_point.original_lng = next_waypoint["originalPosition"]["longitude"]
 
         geo_point
       end
@@ -106,9 +113,8 @@ class Routing
       end
 
       # Truncates (instead of rounding/ceiling/flooring) a float to the given precision.
-      # Important, because Here sometimes has rounding errors in the 7th decimal place of a lat/lng.
-      def truncate(float, precision = 6)
-        Integer(float * (10**precision)) / Float(10**precision)
+      def truncate(float, precision)
+        Integer(float * (10 ** precision)) / Float(10 ** precision)
       end
 
     end

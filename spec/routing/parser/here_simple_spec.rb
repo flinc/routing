@@ -71,22 +71,34 @@ describe Routing::Parser::HereSimple do
           end
 
           it 'raises an exception if no matching original position was found' do
-            expect { subject }.to raise_error(Routing::Parser::NoMatchingMappedPositionFound)
+            expect { subject }.to raise_error(Routing::Parser::NoMatchingMappedPositionFound, 'Mapped waypoints did not match with geopoint')
+          end
+        end
+
+        context 'when response does not contain enough waypoints to map them on the maneuvers' do
+          let(:response) do
+            corrupted_response = JSON.parse(fixture('here/response.json'))
+            corrupted_response['response']['route'].first['waypoint'].pop
+            JSON.dump(corrupted_response)
+          end
+
+          it 'raises an exception if no matching original position was found' do
+            expect { subject }.to raise_error(Routing::Parser::NoMatchingMappedPositionFound, 'No more waypoints available')
           end
         end
       end
     end
   end
 
-  # The fixture used here shows a response from the Here routing service that contains rounding
-  # errors in the following fields:
+  # The fixture used here shows a response from the Here routing service that contains different
+  # values in the following fields:
   # route[] > waypoint[] > mappedPosition > latitude/longitude
   # route[] > leg[] > maneuver > position > latitude/longitude
   #
-  # This two fields are supposed to be the same - yet, they sometimes differ in the 7th decimal place,
+  # This two fields are supposed to contain the same values I think. Yet, they sometimes differ,
   # which caused the parser to fail. This spec assures the parser still works.
-  context 'with a successful, but very large routing response that includes rounding errors' do
-    let(:response) { fixture('here/response_with_rounding_errors.json') }
+  context 'with a successful, but very large routing response that is not mappable by coordinates' do
+    let(:response) { fixture('here/response_with_non_simple_mapping_2.json') }
     let(:json_response) { JSON.parse(response) }
 
     describe '#to_geo_points' do
